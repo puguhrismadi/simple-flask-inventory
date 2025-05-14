@@ -1,8 +1,9 @@
 import mysql.connector
 
-mydb = mysql.connector.connect(
+db = mysql.connector.connect(
     host="localhost",
     user="root",
     password="root",
-    database="db_inventaris"
+    port="8889",
+    database="db_inventaris2"
 )

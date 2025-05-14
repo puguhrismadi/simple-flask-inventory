@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Dashboard</h2>
+<div class="p-6">
+  <h1 class="text-2xl font-bold mb-4">Data Barang</h1>
+  <table class="table-auto w-full border-collapse border border-gray-300">
+    <thead>
+      <tr class="bg-gray-200">
+        <th class="border p-2">Nama Barang</th>
+        <th class="border p-2">Stok</th>
+        <th class="border p-2">Suplier</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for barang in barang_list %}
+      <tr>
+        <td class="border p-2">{{ barang.nama_barang }}</td>
+        <td class="border p-2">{{ barang.jumlah }}</td>
+        <td class="border p-2">{{ barang.nama_supplier }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<a href="/tambah">Tambah Barang</a>
+{% endblock %}

@@ -1,34 +1,61 @@
 from flask import Flask, render_template, request, redirect, session
 from config.db import db
-
+import hashlib
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+
+@app.route('/')
+def index():
+    return "Hello, World!"
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        cursor = db.cursor()
-        cursor.execute("SELECT * FROM users WHERE username=%s AND password=%s", (username, password))
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        # Hash password MD5
+        hashed_password = hashlib.md5(password.encode('utf-8')).hexdigest()
+
+        cursor = db.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM users WHERE username=%s AND password=%s", (username, hashed_password))
         user = cursor.fetchone()
-        cursor.close()
+
         if user:
-            session['user_id'] = user[0]
+            # Simpan session username dan id_user
+            session['username'] = user['username']
+            session['id_user'] = user['id_user']  # kalau ada id_user di tabel
             return redirect('/dashboard')
         else:
-            return render_template('/views/templates/login.html', error='Invalid username or password')
-    else:
-        return render_template('/views/templates/login.html')
+            return 'Login gagal, cek username atau password!'
+    return render_template('login.html')
 @app.route('/dashboard')
-def dashboard():    
-    return render_template('/views/templates/dashboard.html')   
+def dashboard():
+    if 'username' not in session:
+        return redirect('/login')
+
+    cursor = db.cursor(dictionary=True)
+    query = """
+        SELECT 
+            barang.id_barang, 
+            barang.nama_barang, 
+            barang.jumlah, 
+            supplier.nama_supplier, 
+            lokasi.nama_lokasi
+        FROM barang
+        LEFT JOIN supplier ON barang.supplier_id = supplier.id_supplier
+        LEFT JOIN lokasi ON barang.lokasi_id = lokasi.id_lokasi
+    """
+    cursor.execute(query)
+    barang_list = cursor.fetchall()
+    #print(data_dashboard)
+    return render_template('dashboard.html', barang_list=barang_list)
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
     return redirect('/login')
 @app.route('/tambah')
 def tambah():
-    return render_template('/views/templates/barang/tambah_barang.html')
+    return render_template('barang/tambah_barang.html')
 
 @app.route('/tambah_barang')
 def tambah_barang():
@@ -45,7 +72,7 @@ def tambah_barang():
         cursor.execute("SELECT * FROM supplier")
         supplier_list = cursor.fetchall()
         cursor.close()
-        return render_template('/views/templates/barang/tambah_barang.html', supplier_list=supplier_list)
+        return render_template('barang/tambah_barang.html', supplier_list=supplier_list)
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
     cursor = db.cursor(dictionary=True)
@@ -63,7 +90,7 @@ def edit(id):
         cursor.execute("SELECT * FROM supplier")
         supplier_list = cursor.fetchall()
         cursor.close()
-        return render_template('/views/templates/barang/edit_barang.html', barang=barang, supplier_list=supplier_list)
+        return render_template('barang/edit_barang.html', barang=barang, supplier_list=supplier_list)
 @app.route('/hapus/<int:id>', methods=['POST'])
 def hapus(id):
     cursor = db.cursor()
@@ -83,7 +110,7 @@ def tambah_supplier():
         cursor.close()
         return redirect('/dashboard')
     else:
-        return render_template('/views/templates/supplier/tambah_supplier.html')
+        return render_template('supplier/tambah_supplier.html')
 @app.route('/edit_supplier/<int:id>', methods=['GET', 'POST'])
 def edit_supplier(id):
     if request.method == 'POST':
@@ -99,7 +126,7 @@ def edit_supplier(id):
         cursor.execute("SELECT * FROM supplier WHERE id_supplier=%s", (id,))
         supplier = cursor.fetchone()
         cursor.close()
-        return render_template('/views/templates/supplier/edit_supplier.html', supplier=supplier)
+        return render_template('supplier/edit_supplier.html', supplier=supplier)
     
 @app.route('/hapus_supplier/<int:id>', methods=['POST'])
 def hapus_supplier(id):
@@ -108,3 +135,44 @@ def hapus_supplier(id):
     db.commit()
     cursor.close()
     return redirect('/dashboard')
+
+# Tampil Barang
+@app.route('/barang')
+def tampil_barang():
+    if 'username' not in session:
+        return redirect('/login')
+
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT barang.id_barang, barang.nama_barang, barang.stok, suplier.nama_suplier 
+        FROM barang 
+        LEFT JOIN suplier ON barang.id_suplier = suplier.id_suplier
+    """)
+    data_barang = cursor.fetchall()
+    return render_template('barang/tampil_barang.html', barang_list=data_barang)
+
+
+# Tampil Suplier
+@app.route('/suplier')
+def tampil_suplier():
+    if 'username' not in session:
+        return redirect('/login')
+
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM suplier")
+    data_suplier = cursor.fetchall()
+    return render_template('suplier/tampil_suplier.html', suplier_list=data_suplier)
+
+
+# Tampil Lokasi
+@app.route('/lokasi')
+def tampil_lokasi():
+    if 'username' not in session:
+        return redirect('/login')
+
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM lokasi")
+    data_lokasi = cursor.fetchall()
+    return render_template('lokasi/tampil_lokasi.html', lokasi_list=data_lokasi)
+
+app.run(debug=True)
