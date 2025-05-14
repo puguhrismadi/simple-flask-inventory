@@ -66,14 +66,15 @@ def tambah():
 
     return render_template('barang/tambah_barang.html', supplier_list=supplier_list,lokasi_list=lokasi_list)
 
-@app.route('/tambah_barang')
+@app.route('/tambah_barang',methods=['GET', 'POST'])
 def tambah_barang():
     cursor = db.cursor(dictionary=True)
     if request.method == 'POST':
         nama_barang = request.form['nama_barang']
         stok = request.form['stok']
         id_supplier = request.form['id_supplier']
-        cursor.execute("INSERT INTO barang (nama_barang, stok, id_supplier) VALUES (%s, %s, %s)", (nama_barang, stok, id_supplier))
+        id_lokasi = request.form['id_lokasi']
+        cursor.execute("INSERT INTO barang (nama_barang, jumlah, supplier_id, lokasi_id) VALUES (%s, %s, %s, %s)", (nama_barang, stok, id_supplier, id_lokasi))
         db.commit()
         cursor.close()
         return redirect('/dashboard')
@@ -82,14 +83,15 @@ def tambah_barang():
         supplier_list = cursor.fetchall()
         cursor.close()
         return render_template('barang/tambah_barang.html', supplier_list=supplier_list)
-@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+@app.route('/barang/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
     cursor = db.cursor(dictionary=True)
     if request.method == 'POST':
         nama_barang = request.form['nama_barang']
         stok = request.form['stok']
         id_supplier = request.form['id_supplier']
-        cursor.execute("UPDATE barang SET nama_barang=%s, stok=%s, id_supplier=%s WHERE id_barang=%s", (nama_barang, stok, id_supplier, id))
+        id_lokasi = request.form['id_lokasi']
+        cursor.execute("UPDATE barang SET nama_barang=%s, jumlah=%s, supplier_id=%s, lokasi_id=%s WHERE id_barang=%s", (nama_barang, stok, id_supplier, id_lokasi, id))
         db.commit()
         cursor.close()
         return redirect('/dashboard')
@@ -99,8 +101,9 @@ def edit(id):
         cursor.execute("SELECT * FROM supplier")
         supplier_list = cursor.fetchall()
         cursor.close()
+        print(supplier_list)
         return render_template('barang/edit_barang.html', barang=barang, supplier_list=supplier_list)
-@app.route('/hapus/<int:id>', methods=['POST'])
+@app.route('/barang/hapus/<int:id>', methods=['GET'])
 def hapus(id):
     cursor = db.cursor()
     cursor.execute("DELETE FROM barang WHERE id_barang=%s", (id,))
