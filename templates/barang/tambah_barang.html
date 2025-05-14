@@ -1,10 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Form Tambah Barang</h2>
 <form action="{{ url_for('tambah_barang') }}" method="post">
+    <label for="nama_barang">Nama Barang</label>
     <input type="text" name="nama_barang" placeholder="Nama Barang" id="nama_barang" class="border p-2 w-full mb-2">
+    <label for="stok">Stok</label>
     <input type="text" name="stok" placeholder="Stok" id="stok" class="border p-2 w-full mb-2">
-    <select name="id_supplier" id="id_supplier" disabled="disabled">
+    <label for="id_supplier">Supplier</label>
+    <select name="id_supplier" id="id_supplier" class="border p-2 w-full mb-2" >
         {% for s in supplier_list: %}
             <option value="{{ s.id_supplier }}">{{ s.nama_supplier }}</option>
         {% endfor %}
     </select>
-    <button>Simpan</button>
+    <label for="id_lokasi">Lokasi Gudang</label>
+    <select name="id_lokasi" id="id_lokasi" class="border p-2 w-full mb-2">
+        {% for l in lokasi_list: %}
+            <option value="{{ l.id_lokasi }}">{{ l.nama_lokasi }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Simpan</button>
 </form>
+
+{% endblock %}

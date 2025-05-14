@@ -55,7 +55,14 @@ def logout():
     return redirect('/login')
 @app.route('/tambah')
 def tambah():
-    return render_template('barang/tambah_barang.html')
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM supplier")
+    supplier_list = cursor.fetchall()
+    cursor.execute("SELECT * FROM lokasi")
+    lokasi_list = cursor.fetchall()
+    cursor.close()
+
+    return render_template('barang/tambah_barang.html', supplier_list=supplier_list,lokasi_list=lokasi_list)
 
 @app.route('/tambah_barang')
 def tambah_barang():
