@@ -1,0 +1,10 @@
+<form action="{{ url_for('tambah_barang') }}" method="post">
+    <input type="text" name="nama_barang" placeholder="Nama Barang" id="nama_barang" class="border p-2 w-full mb-2">
+    <input type="text" name="stok" placeholder="Stok" id="stok" class="border p-2 w-full mb-2">
+    <select name="id_supplier" id="id_supplier" disabled="disabled">
+        {% for s in supplier_list: %}
+            <option value="{{ s.id_supplier }}">{{ s.nama_supplier }}</option>
+        {% endfor %}
+    </select>
+    <button>Simpan</button>
+</form>

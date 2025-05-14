@@ -1,0 +1,18 @@
+<table>
+<thead>
+     <tr>
+        <th>No</th>
+        <th>Nama </th>
+        <th>Stock</th>
+        <th>Supplier</th>
+    </tr>
+</thead>
+{% for barang in barangs %}
+    <tr>
+        <td>{{loop.index}}</td>
+        <td>{{barang.name}}</td>
+        <td>{{barang.stok}}</td>
+        <td>{{barang.supplier}}</td>
+    </tr>
+{% endfor %}
+</table>
