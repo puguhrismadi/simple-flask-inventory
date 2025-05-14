@@ -30,6 +30,7 @@ def login():
     return render_template('login.html')
 @app.route('/dashboard')
 def dashboard():
+    # Memeriksa apakah pengguna sudah login
     if 'username' not in session:
         return redirect('/login')
 
@@ -52,6 +53,7 @@ def dashboard():
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
+    session.pop('username', None)
     return redirect('/login')
 @app.route('/tambah')
 def tambah():
@@ -151,9 +153,15 @@ def tampil_barang():
 
     cursor = db.cursor(dictionary=True)
     cursor.execute("""
-        SELECT barang.id_barang, barang.nama_barang, barang.stok, suplier.nama_suplier 
-        FROM barang 
-        LEFT JOIN suplier ON barang.id_suplier = suplier.id_suplier
+        SELECT 
+            barang.id_barang, 
+            barang.nama_barang, 
+            barang.jumlah, 
+            supplier.nama_supplier, 
+            lokasi.nama_lokasi
+        FROM barang
+        LEFT JOIN supplier ON barang.supplier_id = supplier.id_supplier
+        LEFT JOIN lokasi ON barang.lokasi_id = lokasi.id_lokasi
     """)
     data_barang = cursor.fetchall()
     return render_template('barang/tampil_barang.html', barang_list=data_barang)

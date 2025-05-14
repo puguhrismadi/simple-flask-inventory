@@ -3,26 +3,51 @@
 {% block content %}
 <h2 class="text-2xl font-bold mb-4">Dashboard</h2>
 <p>Selamat datang di aplikasi inventaris!</p>
-<div class="p-6">
-  <h1 class="text-2xl font-bold mb-4">Data Barang</h1>
-  <table class="table-auto w-full border-collapse border border-gray-300">
-    <thead>
-      <tr class="bg-blue-500 text-white">
-        <th class="border p-2">Nama Barang</th>
-        <th class="border p-2">Stok</th>
-        <th class="border p-2">Suplier</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for barang in barang_list %}
-      <tr>
-        <td class="border p-2">{{ barang.nama_barang }}</td>
-        <td class="border p-2">{{ barang.jumlah }}</td>
-        <td class="border p-2">{{ barang.nama_supplier }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-<a class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" href="/tambah">Tambah Barang</a>
+<hr>
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+    
+    <!-- Widget List Data Barang -->
+    <div class="bg-white rounded-2xl shadow p-4">
+      <h2 class="text-xl font-semibold mb-4">📦 Stock Data Barang</h2>
+      <ul class="space-y-2">
+        {% for barang in barang_list %}
+        {# <li class="p-3 bg-gray-50 rounded-lg hover:bg-gray-100">{{ barang.nama_barang}} - Stok: {{ barang.jumlah }}</li> #}
+        <li class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100">
+          <span>{{ barang.nama_barang}}</span>
+          <span class="text-xs font-medium bg-green-100 text-green-800 px-2 py-1 rounded-full">Stok: {{ barang.jumlah }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <!-- Widget List User -->
+    <div class="bg-white rounded-2xl shadow p-4">
+      <h2 class="text-xl font-semibold mb-4">👤 List User</h2>
+      <ul class="space-y-2">
+        <li class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100">
+          <img src="https://ui-avatars.com/api/?name=User+1&background=random" alt="User 1" class="w-8 h-8 rounded-full mr-3">
+          <div>
+            <p class="font-medium">User 1</p>
+            <p class="text-xs text-gray-500">Admin</p>
+          </div>
+        </li>
+        <li class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100">
+          <img src="https://ui-avatars.com/api/?name=User+2&background=random" alt="User 2" class="w-8 h-8 rounded-full mr-3">
+          <div>
+            <p class="font-medium">User 2</p>
+            <p class="text-xs text-gray-500">Staff</p>
+          </div>
+        </li>
+        <li class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100">
+          <img src="https://ui-avatars.com/api/?name=User+3&background=random" alt="User 3" class="w-8 h-8 rounded-full mr-3">
+          <div>
+            <p class="font-medium">User 3</p>
+            <p class="text-xs text-gray-500">Viewer</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+{% include "chart/lokasi.html" %}
+
 {% endblock %}
