@@ -24,21 +24,21 @@
         <td class="border p-2">{{ barang.jumlah }}</td>
         <td class="border p-2">{{ barang.nama_lokasi }}</td>
         <td class="border p-2">{{ barang.nama_supplier }}</td>
-        <td><a href="http://127.0.0.1:5000/barang/edit/{{ barang.id_barang }}">edit</a> | <a href="http://127.0.0.1:5000/barang/hapus/{{ barang.id_barang }}">Hapus</a></td>
-            {# <td><div class="flex space-x-2">
+        {# <td><a href="http://127.0.0.1:5000/barang/edit/{{ barang.id_barang }}">edit</a> | <a href="http://127.0.0.1:5000/barang/hapus/{{ barang.id_barang }}">Hapus</a></td> #}
+            <td><div class="flex space-x-2">
                     <a
-                        href="/barang/edit/{{ barang.id }}"
+                        href="/barang/edit/{{ barang.id_barang }}"
                         class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
                     >
                         Edit
                     </a>
                     <a
-                        href="/barang/hapus/{{ barang.id }}"
+                        href="/barang/hapus/{{ barang.id_barang }}"
                         class="inline-flex items-center px-4 py-2 bg-red-500 hover:bg-red-700 text-white font-semibold rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75"
                     >
                         Delete
                     </a>
-    </div></td> #}
+    </div></td>
       </tr>
       {% endfor %}
     </tbody>

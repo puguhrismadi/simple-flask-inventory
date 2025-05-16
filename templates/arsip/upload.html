@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<form method="POST" enctype="multipart/form-data">
+  <input type="text" name="nama_arsip" placeholder="Nama Arsip" required>
+  <select name="kategori_id">
+    {% for kategori in kategori_list %}
+    <option value="{{ kategori.id_kategori }}">{{ kategori.nama_kategori }}</option>
+    {% endfor %}
+  </select>
+  <textarea name="keterangan" placeholder="Keterangan"></textarea>
+  <input type="file" name="files" multiple required>
+  <button type="submit">Upload</button>
+</form>
+{% endblock %}

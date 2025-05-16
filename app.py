@@ -3,7 +3,7 @@ from config.db import db
 import hashlib
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
-
+app.config['UPLOAD_FOLDER'] = 'static/uploads/arsip'
 @app.route('/')
 def index():
     return "Hello, World!"
@@ -192,5 +192,9 @@ def tampil_lokasi():
     cursor.execute("SELECT * FROM lokasi")
     data_lokasi = cursor.fetchall()
     return render_template('lokasi/tampil_lokasi.html', lokasi_list=data_lokasi)
+
+# Register Blueprint
+from controllers.arsip_controller import arsip_bp
+app.register_blueprint(arsip_bp)
 
 app.run(debug=True)

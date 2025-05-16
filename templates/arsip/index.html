@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="text-2xl font-bold">Data Arsip</h1>
+<table class="table-auto w-full mt-4 border-collapse border border-gray-300">
+  <thead>
+    <tr class="bg-blue-500 text-white">
+      <th class="border p-2">Nama Arsip</th>
+      <th class="border p-2">Kategori</th>
+      <th class="border p-2">Aksi</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for arsip in arsip_list %}
+    <tr>
+      <td class="border p-2">{{ arsip.nama_arsip }}</td>
+      <td class="border p-2">{{ arsip.kategori.nama_kategori }}</td>
+      <td class="border p-2">
+        <a href="{{ url_for('detail_arsip', id_arsip=arsip.id_arsip) }}" class="text-blue-600 underline">Detail</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
