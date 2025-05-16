@@ -1,15 +1,52 @@
 {% extends 'base.html' %}
-{% block content %}
 
-<form method="POST" enctype="multipart/form-data">
-  <input type="text" name="nama_arsip" placeholder="Nama Arsip" required>
-  <select name="kategori_id">
-    {% for kategori in kategori_list %}
-    <option value="{{ kategori.id_kategori }}">{{ kategori.nama_kategori }}</option>
-    {% endfor %}
-  </select>
-  <textarea name="keterangan" placeholder="Keterangan"></textarea>
-  <input type="file" name="files" multiple required>
-  <button type="submit">Upload</button>
-</form>
+{% block content %}
+<div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow">
+  <h2 class="text-2xl font-bold mb-4">Upload Arsip</h2>
+  <form action="/arsip/upload" method="POST" enctype="multipart/form-data" class="space-y-4">
+
+    <!-- Nama Arsip -->
+    <div>
+      <label class="block font-medium mb-1">Nama Arsip</label>
+      <input type="text" name="nama_arsip" required
+             class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
+
+    <!-- Kategori Arsip -->
+    <div>
+      <label class="block font-medium mb-1">Kategori Arsip</label>
+      <select name="kategori_id" required
+              class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">-- Pilih Kategori --</option>
+        {% for kategori in kategori_list %}
+          <option value="{{ kategori.id_kategori }}">{{ kategori.nama_kategori }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Keterangan -->
+    <div>
+      <label class="block font-medium mb-1">Keterangan</label>
+      <textarea name="keterangan" rows="3"
+                class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+    </div>
+
+    <!-- Upload File -->
+    <div>
+      <label class="block font-medium mb-1">Upload File (boleh lebih dari 1)</label>
+      <input type="file" name="files" multiple
+             class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+      <p class="text-sm text-gray-500 mt-1">Format: jpg, jpeg, png, pdf, mp3, wav, mp4</p>
+    </div>
+
+    <!-- Tombol Submit -->
+    <div>
+      <button type="submit"
+              class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600">
+        Upload Arsip
+      </button>
+    </div>
+
+  </form>
+</div>
 {% endblock %}

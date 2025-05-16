@@ -2,9 +2,10 @@ from flask import request, redirect, url_for, render_template, Blueprint, curren
 from werkzeug.utils import secure_filename
 import os
 import models.m_arsip as arsip_model
+from config.db import get_connection as get_db_connection
 arsip_bp = Blueprint('arsip_bp', __name__, template_folder='../templates/arsip')
 
-# ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'pdf', 'mp3', 'wav', 'mp4', 'webm'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'pdf', 'mp3', 'wav', 'mp4', 'webm'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -16,9 +17,9 @@ def allowed_file(filename):
 @arsip_bp.route('/arsip/upload', methods=['GET', 'POST'])
 def upload_arsip():
     # Ambil list kategori
-    conn = db()
+    conn = get_db_connection()  # ← harus panggil function di sini
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM kategori")
+    cursor.execute("SELECT * FROM kategori_arsip")
     kategori_list = cursor.fetchall()
 
     if request.method == 'POST':
@@ -60,16 +61,23 @@ def upload_arsip():
     return render_template('arsip/upload.html', kategori_list=kategori_list)
 @arsip_bp.route('/arsip')
 def index_arsip():
-    arsip_list = arsip_model.get_all_arsip()
+    m_arsip = arsip_model
+    arsip_list = m_arsip.get_all_arsip()
+    
     return render_template('arsip/index.html', arsip_list=arsip_list)
 
 @arsip_bp.route('/arsip/<int:id_arsip>')
 def detail_arsip(id_arsip):
-    conn = db()
+    conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    # Ambil data arsip
-    cursor.execute("SELECT * FROM arsip WHERE id_arsip = %s", (id_arsip,))
+    # Ambil data arsip + kategori
+    cursor.execute("""
+        SELECT a.*, k.nama_kategori 
+        FROM arsip a
+        LEFT JOIN kategori_arsip k ON a.kategori_id = k.id_kategori
+        WHERE a.id_arsip = %s
+    """, (id_arsip,))
     arsip = cursor.fetchone()
 
     # Ambil file-file arsip terkait
