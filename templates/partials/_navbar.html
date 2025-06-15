@@ -1,0 +1,12 @@
+<nav class="bg-blue-600 p-4 text-white flex justify-between">
+  <div class="font-bold">Inventaris App</div>
+  <div>
+    {% if session['username'] %}
+    <a href="/dashboard" class="mr-4 hover:underline">Dashboard</a>
+    <a href="/tambah" class="mr-4 hover:underline">Tambah Barang</a>
+    <a href="/logout" class="hover:underline">Logout</a>
+    {% else %}
+    <a href="/login" class="hover:underline">Login</a>
+    {% endif %}
+  </div>
+</nav>

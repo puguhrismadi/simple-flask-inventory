@@ -1,0 +1,22 @@
+{% include 'partials/header.html' %}
+{% include 'partials/navbar.html' %}
+
+<div class="p-6">
+  <h1 class="text-2xl font-bold mb-4">Data Lokasi</h1>
+  <table class="table-auto w-full border-collapse border border-gray-300">
+    <thead>
+      <tr class="bg-gray-200">
+        <th class="border p-2">Nama Lokasi</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for lokasi in lokasi_list %}
+      <tr>
+        <td class="border p-2">{{ lokasi.nama_lokasi }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% include 'partials/footer.html' %}

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2 class="text-2xl font-bold mb-4">Dashboard Arsip</h2>
+
+<div class="mb-4">
+  <a href="{{ url_for('report.export_formal_pdf') }}" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">Export PDF</a>
+  <a href="{{ url_for('report.export_dashboard_excel') }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">Export Excel</a>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+  <div class="bg-white shadow rounded p-4">
+    <p class="text-gray-500">Total Arsip</p>
+    <p class="text-3xl font-bold">{{ total_arsip }}</p>
+  </div>
+  <div class="bg-white shadow rounded p-4">
+    <p class="text-gray-500">Total Penyimpanan</p>
+    <p class="text-3xl font-bold">{{ '%.2f'|format(total_size) }} MB</p>
+  </div>
+</div>
+
+<h3 class="text-xl font-semibold mb-2">Arsip per Kategori</h3>
+<table class="table-auto w-full border-collapse border border-gray-300">
+  <thead>
+    <tr class="bg-gray-100">
+      <th class="border px-4 py-2">Kategori</th>
+      <th class="border px-4 py-2">Jumlah Arsip</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for k in kategori_data %}
+    <tr>
+      <td class="border px-4 py-2">{{ k.nama_kategori }}</td>
+      <td class="border px-4 py-2">{{ k.jumlah }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

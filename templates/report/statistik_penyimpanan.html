@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2 class="text-2xl font-bold mb-4">Statistik Penyimpanan</h2>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+  <div class="bg-white shadow rounded p-4">
+    <p class="text-gray-500">Total Arsip</p>
+    <p class="text-3xl font-bold">{{ total_arsip }}</p>
+  </div>
+  <div class="bg-white shadow rounded p-4">
+    <p class="text-gray-500">Total Penyimpanan</p>
+    <p class="text-3xl font-bold"></p>
+  </div>
+</div>
+
+<h3 class="text-xl font-semibold mb-2">Statistik per Tipe File</h3>
+<table class="table-auto w-full border-collapse border border-gray-300">
+  <thead>
+    <tr class="bg-gray-100">
+      <th class="border px-4 py-2">Tipe File</th>
+      <th class="border px-4 py-2">Jumlah File</th>
+   
+    </tr>
+  </thead>
+  <tbody>
+    {% for t in tipe_data %}
+    <tr>
+      <td class="border px-4 py-2">{{ t.file_type }}</td>
+      <td class="border px-4 py-2">{{ t.jumlah }}</td>
+     
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
